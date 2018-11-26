@@ -1,0 +1,16 @@
+/local.properties
+
+# OSX files
+.DS_Store
+
+# Android Studio
+*.iml
+.idea/
+.gradle/
+build/
+gradle.properties
+
+app/sonar-project.properties
+
+app/*.jks
+keystore.properties
