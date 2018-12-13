@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.secfirst.advancedsearch.mvp.views.SearchResultView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/searchTermView"
+                android:background="@color/colorPrimary"
+                android:text="Dido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</org.secfirst.advancedsearch.mvp.views.SearchResultView>
