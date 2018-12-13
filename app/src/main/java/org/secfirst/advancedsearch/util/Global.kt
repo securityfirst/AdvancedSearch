@@ -6,13 +6,14 @@ import java.util.concurrent.Executors
 
 class Global: Application() {
 
-    companion object {
-        lateinit var instance: Global
-    }
-
     override fun onCreate() {
         super.onCreate()
         instance = this
+    }
+
+    companion object {
+        lateinit var instance: Global
+            private set
     }
 
     private var threadSpec: ThreadSpec? = null
