@@ -2,7 +2,6 @@ package org.secfirst.advancedsearch.util
 
 import android.app.Application
 import androidx.room.Room
-import com.facebook.stetho.Stetho
 import org.secfirst.advancedsearch.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.AppDatabase
 import java.util.concurrent.Executors
@@ -18,7 +17,6 @@ class Global: Application() {
             applicationContext,
             AppDatabase::class.java, "umbrella"
         ).build()
-        Stetho.initializeWithDefaults(this);
     }
 
     companion object {

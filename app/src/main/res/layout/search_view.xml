@@ -2,20 +2,46 @@
 <org.secfirst.advancedsearch.mvp.views.SearchResultView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent">
-
-        <TextView
-                android:id="@+id/searchTermView"
-                android:background="@color/colorPrimary"
-                android:text="Dido"
+        
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/searchCriteria"
+                android:orientation="vertical">
+        
+            <TextView
+                    android:id="@+id/searchTermView"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:textSize="@dimen/defaultTextViewPadding"
+                    android:layout_height="wrap_content"/>
+    
+            <pe.orbis.materialpillsbox.MaterialPillsBox
+                    android:id="@+id/mtbArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:closeIcon="@drawable/ic_close_white_24dp"
+                    app:pillCloseIconMarginLeft="20dp"
+                    app:pillSelectionMode="multi"
+                    app:pillBackground="@color/md_deep_purple_600"
+                    app:pillSelectedBackground="@color/md_deep_purple_600"
+                    app:showCloseIcon="true"
+                    app:pillTextColor="@color/md_white_1000"
+                    app:pillMarginBottom="10dp"/>
+            
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchResultsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
