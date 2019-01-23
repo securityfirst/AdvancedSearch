@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Advanced Search Sample</string>
     <string name="search">Search</string>
+    <string name="search_results">Search Results</string>
 </resources>
