@@ -1,14 +1,24 @@
 package org.secfirst.advancedsearch.util
 
 import android.app.Application
+import androidx.room.Room
+import com.facebook.stetho.Stetho
 import org.secfirst.advancedsearch.mvp.ThreadSpec
+import org.secfirst.advancedsearch.mvp.data.AppDatabase
 import java.util.concurrent.Executors
 
 class Global: Application() {
 
+    var db: AppDatabase? = null
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "umbrella"
+        ).build()
+        Stetho.initializeWithDefaults(this);
     }
 
     companion object {

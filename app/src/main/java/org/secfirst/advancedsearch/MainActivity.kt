@@ -4,10 +4,15 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
 import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import org.secfirst.advancedsearch.mvp.models.Category
+import org.secfirst.advancedsearch.mvp.models.Difficulty
+import org.secfirst.advancedsearch.mvp.models.Segment
+import org.secfirst.advancedsearch.util.Global
 import java.util.logging.Logger
 
 class MainActivity : AppCompatActivity() {
@@ -15,8 +20,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        centerText.setText("")
-        Logger.getLogger(javaClass.simpleName).info("on create")
+        centerText.text = ""
+        createRecords()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -30,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             // Assumes current activity is the searchable activity
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
-            setSubmitButtonEnabled(true)
+            isSubmitButtonEnabled = true
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     p0?.let {
@@ -56,5 +61,33 @@ class MainActivity : AppCompatActivity() {
     override fun onSearchRequested(): Boolean {
         Logger.getLogger(javaClass.simpleName).info("search requested")
         return super.onSearchRequested()
+    }
+
+    private fun createRecords(): Disposable? {
+        return Global.instance.db?.segmentDao()?.getAll()?.subscribe {
+            if (it.isEmpty()) {
+                val segmentsToInsert = arrayOf(
+                    Segment(
+                        id = "first",
+                        title = "First title",
+                        text = "First text",
+                        difficulty = Difficulty("advanced", "Advanced"),
+                        category = Category("personal", "Personal", "")
+                    ),
+                    Segment(
+                        id = "second",
+                        title = "Second title",
+                        text = "second text",
+                        difficulty = Difficulty("beginner", "Beginner"),
+                        category = Category("information", "Information", "")
+                    )
+                )
+                Global.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.subscribe {
+                    Logger.getLogger("createRecords").info("krneki")
+                } ?: kotlin.run {
+                    Logger.getLogger("createRecords").info("There was an error inserting the records")
+                }
+            }
+        }
     }
 }
