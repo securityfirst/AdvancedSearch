@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.secfirst.advancedsearch"/>
+          package="org.secfirst.advancedsearch.library"/>
