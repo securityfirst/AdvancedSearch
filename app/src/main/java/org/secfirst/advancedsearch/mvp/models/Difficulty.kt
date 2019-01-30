@@ -10,9 +10,9 @@ data class Difficulty (
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "did") var id: String,
-    @ColumnInfo(name = "dname") var name: String?
+    @ColumnInfo(name = "dname") var name: String
     ) {
     companion object {
-        val None: Difficulty = Difficulty("", null)
+        val None: Difficulty = Difficulty("", "")
     }
 }

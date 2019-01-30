@@ -7,6 +7,7 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment
 
 @Dao
@@ -20,6 +21,10 @@ interface SegmentDao {
     @Query("SELECT * FROM segment WHERE title LIKE '%' || :title || '%' OR " +
             "text LIKE '%' || :text || '%'")
     fun findByTitleOrText(title: String, text: String): Flowable<List<Segment>>
+
+    @Query("SELECT * FROM segment WHERE (title LIKE '%' || :title || '%' OR " +
+            "text LIKE '%' || :title || '%') AND (LOWER(cname) LIKE LOWER('%' || :category || '%')) AND (dname != :difficulty)")
+    fun findByCriteria(title: String, category: String, difficulty: String): Flowable<List<Segment>>
 
     @Insert
     fun insertAll(vararg segment: Segment) : Completable

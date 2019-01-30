@@ -6,10 +6,7 @@ import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment
 
-@Database(entities = arrayOf(
-    Segment::class,
-    Difficulty::class,
-    Category::class),
+@Database(entities = [Segment::class, Difficulty::class, Category::class],
         version = 1,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

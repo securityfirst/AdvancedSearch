@@ -4,24 +4,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    
     <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent">
         
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/searchCriteria"
-                android:orientation="vertical">
-        
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            
             <TextView
-                    android:id="@+id/searchTermView"
-                    android:background="@color/colorPrimary"
-                    android:layout_width="match_parent"
-                    android:textSize="@dimen/defaultTextViewPadding"
+                    android:id="@+id/resultCount"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+            
+            <TextView
+                    android:id="@+id/advancedCriteriaToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            
+        </LinearLayout>
+        
+        <LinearLayout
+                android:id="@+id/advancedCriteriaPanel"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
     
             <pe.orbis.materialpillsbox.MaterialPillsBox
                     android:id="@+id/mtbArea"
@@ -36,13 +43,66 @@
                     app:pillTextColor="@color/md_white_1000"
                     app:pillMarginBottom="10dp"/>
             
+            <LinearLayout
+                    android:id="@+id/criteriaLayout"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content" />
+            
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                
+                <Button
+                        android:id="@+id/searchCancel"
+                        android:text="@string/cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+    
+                <Button
+                        android:id="@+id/searchApply"
+                        android:text="@string/apply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                
+            </LinearLayout>
+            
         </LinearLayout>
-
+    
+        <TextView
+                android:id="@+id/searchTermView"
+                android:layout_marginTop="20dp"
+                android:gravity="start|left"
+                android:layout_marginLeft="@dimen/defaultMargin"
+                android:layout_marginRight="@dimen/defaultMargin"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/largerTextSize"
+                android:layout_height="wrap_content"/>
+        
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchResultsListView"
+            android:layout_marginLeft="@dimen/defaultMargin"
+            android:layout_marginRight="@dimen/defaultMargin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        
+        <TextView
+                android:id="@+id/searchResultsEmptyView"
+                android:visibility="gone"
+                android:text="@string/no_results_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    
+        <TextView
+                android:id="@+id/searchResultsNoSearchTerm"
+                android:visibility="gone"
+                android:text="@string/no_search_term"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
 
 </org.secfirst.advancedsearch.mvp.views.SearchResultView>

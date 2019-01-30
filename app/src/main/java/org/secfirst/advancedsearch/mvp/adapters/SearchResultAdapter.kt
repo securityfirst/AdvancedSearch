@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.search_result_item.view.*
 import org.secfirst.advancedsearch.R
-import org.secfirst.advancedsearch.mvp.models.SearchResult
+import org.secfirst.advancedsearch.SearchResult
 
 class SearchResultAdapter(val results : MutableList<SearchResult>, val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

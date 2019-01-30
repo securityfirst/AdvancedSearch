@@ -15,5 +15,4 @@ data class Segment (
     @ColumnInfo(name = "text") var text: String,
     @Embedded var category: Category = Category.None,
     @Embedded var difficulty: Difficulty = Difficulty.None
-
 )
