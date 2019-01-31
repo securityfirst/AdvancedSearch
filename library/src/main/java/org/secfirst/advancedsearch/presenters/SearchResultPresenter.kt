@@ -27,22 +27,14 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         setSearchFields(view)
 
         view.onSearchClicked().subscribeUntilDetached { list ->
-            val filters = list.map { it }
-            AdvancedSearch.getSearchTermFromCompositeView(filters).let {searchTerm ->
-                val criteriaMap = hashMapOf<String, SearchCriteria>()
-                criteriaList.associateByTo(criteriaMap) { it.name }
-                searchTerm.criteria?.filterNot { it.first == "text" }?.forEach {
-                    criteriaMap[it.first]?.searchFor = it.second
-                }
-                performSearch(view, searchTerm, criteriaMap)
+            AdvancedSearch.getSearchTermFromCompositeView(list).let {searchTerm ->
+                performSearch(view, searchTerm)
             }
         }
 
         view.onIntentReceived().subscribeUntilDetached { intent ->
             AdvancedSearch.getSearchTermFromIntent(intent).let {searchTerm ->
-                val criteriaMap = hashMapOf<String, SearchCriteria>()
-                criteriaList.associateByTo(criteriaMap) { it.name }
-                performSearch(view, searchTerm, criteriaMap)
+                performSearch(view, searchTerm)
             }
         }
 
@@ -80,14 +72,13 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
 
     private fun performSearch(
         view: View,
-        searchTerm: SearchTerm,
-        criteriaMap: HashMap<String, SearchCriteria>
+        searchTerm: SearchTerm
     ) {
         Logger.getLogger(tag).info("Searching for ${searchTerm}")
         view.resetResults()
         view.displaySearchTerm(searchTerm.text)
         bg {
-            dataProvider.findByCriteria(searchTerm.text, criteriaMap["category"]?.searchFor ?: "", criteriaMap["difficulty"]?.searchFor ?: "").subscribe { segmentList: List<SearchResult> ->
+            dataProvider.findByCriteria(searchTerm.text, *searchTerm.criteria?.map { it.second }?.toTypedArray().orEmpty()).subscribe { segmentList: List<SearchResult> ->
                 when (segmentList.isNotEmpty()) {
                     true -> {
                         ui {
@@ -119,7 +110,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
 
     interface View: Presenter.View {
         fun onIntentReceived(): Observable<Intent>
-        fun onSearchClicked(): Observable<List<Pair<String, String>>>
+        fun onSearchClicked(): Observable<HashMap<String, String>>
         fun onCancelClicked(): Observable<Unit>
 
         fun displaySearchTerm(searchTerm: String)

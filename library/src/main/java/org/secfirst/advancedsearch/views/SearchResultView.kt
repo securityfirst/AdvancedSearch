@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.search_view.view.*
 import org.secfirst.advancedsearch.adapters.SearchResultAdapter
 import org.secfirst.advancedsearch.interfaces.AdvancedSearchPresenter
 import org.secfirst.advancedsearch.library.R
-import org.secfirst.advancedsearch.models.FieldTypes
 import org.secfirst.advancedsearch.models.PillItem
 import org.secfirst.advancedsearch.models.SearchCriteria
 import org.secfirst.advancedsearch.models.SearchResult
@@ -53,51 +52,63 @@ class SearchResultView @JvmOverloads constructor(
     }
 
     private val intentReceivedRelay = BehaviorRelay.create<Intent>()
-    private val searchAppliedRelay = BehaviorRelay.create<List<Pair<String, String>>>()
+    private val searchAppliedRelay = BehaviorRelay.create<HashMap<String, String>>()
 
 
     override fun onIntentReceived(): Observable<Intent> = intentReceivedRelay
-    override fun onSearchClicked(): Observable<List<Pair<String, String>>> = searchAppliedRelay
+    override fun onSearchClicked(): Observable<HashMap<String, String>> = searchAppliedRelay
     override fun onAdvancedToggleClick(): Observable<Unit> = advancedCriteriaToggle.clicks()
     override fun onCancelClicked(): Observable<Unit> = searchCancel.clicks()
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-//        presenter = SearchResultPresenter(
-//            presenterInterface.getDataProvider(),
-//            presenterInterface.getCriteria(),
-//            presenterInterface.getThreadSpec()
-//        )
         presenter.onViewAttached(this)
         setSearchResultsListView()
+        setApplyClickListener()
+        passIntent((context as AppCompatActivity).intent)
     }
 
     private fun setSearchResultsListView() {
         searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         searchResultsListView.adapter = searchResultAdapter
+    }
 
-        passIntent((context as AppCompatActivity).intent)
-        val list = mutableListOf<Pair<String, String>>()
+    private fun setApplyClickListener() {
         searchApply.setOnClickListener {
-            (criteriaLayout as ViewGroup).asSequence().iterator().forEach {criteriaChild ->
+            val list = hashMapOf<String, String>()
+            (criteriaLayout as ViewGroup)
+                .asSequence()
+                .iterator()
+                .forEach {criteriaChild ->
                 when(criteriaChild) {
                     is EditText -> {
-                        list.add(Pair(criteriaChild.tag as String, criteriaChild.text.toString()))
+                        if (!list.containsKey(criteriaChild.tag as String?)) {
+                            list[criteriaChild.tag as String] = criteriaChild.text.toString()
+                        }
+                    }
+                    is AutoCompleteTextView -> {
+                        if (!list.containsKey(criteriaChild.tag as String?)) {
+                            list[criteriaChild.tag as String] = criteriaChild.text.toString()
+                        }
                     }
                     is LinearLayout -> {
-                        (0..criteriaChild.childCount).filter {
-                            criteriaChild.getChildAt(it) != null
-                        }.forEach {item ->
+                        (0..criteriaChild.childCount)
+                            .filterNot { criteriaChild.getChildAt(it) == null }
+                            .forEach {item ->
                             val linearLayoutChild = criteriaChild.getChildAt(item)
-                            Logger.getLogger("ccc").info("${linearLayoutChild::class.qualifiedName}")
-                            linearLayoutChild?.let {
-                                when(linearLayoutChild) {
-                                    is SelectablePillBox -> {
-                                        if (linearLayoutChild.selectedItems.isNotEmpty()) {
-                                            list.add(Pair(linearLayoutChild.tag as String, linearLayoutChild.selectedItems[0]))
-                                        }
+                            when(linearLayoutChild) {
+                                is SelectablePillBox -> {
+                                    (linearLayoutChild.tag as String?)?.let{
+                                        list[it] = linearLayoutChild.selectedItems.getOrElse(0) {""}
                                     }
-                                    else -> Logger.getLogger("bbb").info("${linearLayoutChild::class.qualifiedName}")
+                                }
+                                is AutoCompleteTextView -> {
+                                    (linearLayoutChild.tag as String?)?.let {
+                                        list[it] = linearLayoutChild.text.toString()
+                                    }
+                                }
+                                else -> {
+                                    Logger.getLogger("bbb").info("${linearLayoutChild::class.qualifiedName}")
                                 }
                             }
                         }
@@ -219,39 +230,32 @@ class SearchResultView @JvmOverloads constructor(
             }
         }
         addView.threshold = 1
-        addView.hint = criteria.name
+        addView.hint = criteria.name.capitalize()
         layout.tag = criteria.name
         layout.addView(pillsBox)
         layout.addView(addView)
         criteriaLayout.addView(layout)
     }
 
-    fun refreshSearchCriteriaByTag(criteria: SearchCriteria) {
-        (criteriaLayout as ViewGroup).asSequence().iterator().forEach {
-            if (it.tag == criteria.name) {
-                when(criteria.type) {
-                    FieldTypes.STRING -> {
-                        addEditTextToLayout(criteria)
-                    }
-                    FieldTypes.PILLBOX -> {
-                        addPillboxToLayout(criteria)
-                    }
-                    FieldTypes.FREE_TEXT -> {
-                        addMainTextToLayout(criteria)
-                    }
-                    else -> {
-                        addEditTextToLayout(criteria)
-                    }
-                }
-            }
-        }
-    }
-
     override fun addEditTextToLayout(criteria: SearchCriteria) {
-        val addView = EditText(context)
-        addView.hint = criteria.name
-        addView.tag = criteria.name
-        criteriaLayout.addView(addView)
+        criteria.values?.let {
+            val adapter = ArrayAdapter<String>(
+                context,
+                android.R.layout.simple_dropdown_item_1line,
+                criteria.values?.toTypedArray() ?: arrayOf()
+            )
+            val addView = AutoCompleteTextView(context)
+            addView.setAdapter(adapter)
+            addView.threshold = 1
+            addView.tag = criteria.name
+            addView.hint = criteria.name.capitalize()
+            criteriaLayout.addView(addView)
+        } ?: kotlin.run {
+            val addView = EditText(context)
+            addView.hint = criteria.name.capitalize()
+            addView.tag = criteria.name
+            criteriaLayout.addView(addView)
+        }
     }
 
     override fun addMainTextToLayout(criteria: SearchCriteria) {
@@ -259,7 +263,7 @@ class SearchResultView @JvmOverloads constructor(
         addView.setSingleLine(false)
         addView.maxLines = 3
         addView.tag = criteria.name
-        addView.hint = criteria.name
+        addView.hint = criteria.name.capitalize()
         criteriaLayout.addView(addView)
     }
 
