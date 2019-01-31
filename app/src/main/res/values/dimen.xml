@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="largerTextSize">24sp</dimen>
-    <dimen name="defaultMargin">20dp</dimen>
-</resources>

@@ -3,7 +3,6 @@ package org.secfirst.advancedsearch
 import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.facebook.stetho.Stetho
 import org.secfirst.advancedsearch.util.mvp.BgUiThreadSpec
 import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.AppDatabase
@@ -21,7 +20,6 @@ class AdvancedSearchApp: Application() {
             AppDatabase::class.java, "umbrella.db"
         ).setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
-        Stetho.initializeWithDefaults(this@AdvancedSearchApp)
     }
 
     companion object {

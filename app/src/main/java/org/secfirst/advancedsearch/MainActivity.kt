@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
@@ -62,8 +61,8 @@ class MainActivity : AppCompatActivity() {
         return super.onSearchRequested()
     }
 
-    private fun createRecords(): Disposable? {
-        return AdvancedSearchApp.instance.db?.segmentDao()?.getAll()?.subscribe {
+    private fun createRecords() {
+        AdvancedSearchApp.instance.db?.segmentDao()?.getAll()?.subscribe {
             if (it.isEmpty()) {
                 val segmentsToInsert = arrayOf(
                     Segment(
@@ -83,10 +82,10 @@ class MainActivity : AppCompatActivity() {
                 )
                 AdvancedSearchApp.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.subscribe {
                     Logger.getLogger("createRecords").info("Done")
-                } ?: kotlin.run {
+                }?.dispose() ?: kotlin.run {
                     Logger.getLogger("createRecords").info("There was an error inserting the records")
                 }
             }
-        }
+        }?.dispose()
     }
 }
