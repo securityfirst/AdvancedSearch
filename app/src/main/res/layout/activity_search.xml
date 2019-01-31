@@ -5,6 +5,9 @@
         android:orientation="vertical"
         android:layout_height="match_parent">
 
-        <include android:id="@+id/searchResultView" layout="@layout/search_view"/>
+        <org.secfirst.advancedsearch.views.SearchResultView
+                android:id="@+id/searchResultView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -1,13 +1,11 @@
-package org.secfirst.advancedsearch.mvp.views
+package org.secfirst.advancedsearch.views
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxrelay.BehaviorRelay
 import kotlinx.android.synthetic.main.search_view.view.*
+import org.secfirst.advancedsearch.adapters.SearchResultAdapter
+import org.secfirst.advancedsearch.interfaces.AdvancedSearchPresenter
+import org.secfirst.advancedsearch.library.R
 import org.secfirst.advancedsearch.models.FieldTypes
-import org.secfirst.advancedsearch.R
-import org.secfirst.advancedsearch.mvp.adapters.SearchResultAdapter
 import org.secfirst.advancedsearch.models.PillItem
 import org.secfirst.advancedsearch.models.SearchCriteria
 import org.secfirst.advancedsearch.models.SearchResult
-import org.secfirst.advancedsearch.mvp.models.Category
-import org.secfirst.advancedsearch.mvp.models.Difficulty
-import org.secfirst.advancedsearch.mvp.presentation.SearchResultPresenter
-import org.secfirst.advancedsearch.util.Global
+import org.secfirst.advancedsearch.presenters.SearchResultPresenter
 import org.secfirst.advancedsearch.util.SelectablePillBox
+import org.secfirst.advancedsearch.util.asSequence
+import org.secfirst.advancedsearch.util.hideKeyboard
 import pe.orbis.materialpillsbox.OnPillClickListener
 import pe.orbis.materialpillsbox.PillEntity
 import rx.Observable
@@ -35,12 +33,28 @@ class SearchResultView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), SearchResultPresenter.View {
 
-    private val searchResultAdapter = SearchResultAdapter(mutableListOf(), context)
+    init {
+        init(attrs)
+    }
 
-    private var presenter: SearchResultPresenter? = null
+    private fun init(attrs: AttributeSet?) {
+        View.inflate(context, R.layout.search_view, this)
+    }
+
+    private val searchResultAdapter = SearchResultAdapter(mutableListOf(), context)
+    private val presenterInterface: AdvancedSearchPresenter = context as AdvancedSearchPresenter
+
+    private val presenter: SearchResultPresenter by lazy {
+        SearchResultPresenter(
+            presenterInterface.getDataProvider(),
+            presenterInterface.getCriteria(),
+            presenterInterface.getThreadSpec()
+        )
+    }
 
     private val intentReceivedRelay = BehaviorRelay.create<Intent>()
     private val searchAppliedRelay = BehaviorRelay.create<List<Pair<String, String>>>()
+
 
     override fun onIntentReceived(): Observable<Intent> = intentReceivedRelay
     override fun onSearchClicked(): Observable<List<Pair<String, String>>> = searchAppliedRelay
@@ -49,38 +63,19 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+//        presenter = SearchResultPresenter(
+//            presenterInterface.getDataProvider(),
+//            presenterInterface.getCriteria(),
+//            presenterInterface.getThreadSpec()
+//        )
+        presenter.onViewAttached(this)
+        setSearchResultsListView()
+    }
+
+    private fun setSearchResultsListView() {
         searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         searchResultsListView.adapter = searchResultAdapter
 
-        val categories = listOf(Category("personal", "Personal", ""), Category("information", "Information", ""))
-        val difficulties = listOf(Difficulty("beginner", "Beginner"), Difficulty("advanced", "Advanced"))
-        val categoryOptions = categories.map { it.title }
-        val difficultyOptions = difficulties.map { it.name }
-        val criteria = mutableListOf<SearchCriteria>()
-        criteria.add(
-            SearchCriteria(
-                "category",
-                FieldTypes.PILLBOX,
-                categoryOptions,
-                null
-            )
-        )
-        criteria.add(
-            SearchCriteria(
-                "difficulty",
-                FieldTypes.STRING,
-                difficultyOptions,
-                null
-            )
-        )
-        criteria.add(SearchCriteria("text", FieldTypes.FREE_TEXT, null, null))
-
-        presenter = SearchResultPresenter(
-            Global.instance.db?.segmentDao(),
-            criteria,
-            Global.instance.getThreadSpec()
-        )
-        presenter?.onViewAttached(this)
         passIntent((context as AppCompatActivity).intent)
         val list = mutableListOf<Pair<String, String>>()
         searchApply.setOnClickListener {
@@ -110,7 +105,7 @@ class SearchResultView @JvmOverloads constructor(
                 }
             }
             searchAppliedRelay.call(list)
-            context.hideKeyboard(searchResultView)
+            context.hideKeyboard(this@SearchResultView)
         }
     }
 
@@ -120,7 +115,7 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        presenter?.onViewDetached(this)
+        presenter.onViewDetached(this)
     }
 
     override fun displaySearchTerm(searchTerm: String) {
@@ -251,38 +246,6 @@ class SearchResultView @JvmOverloads constructor(
             }
         }
     }
-
-    fun ViewGroup.asSequence(): Sequence<View> = object : Sequence<View> {
-        override fun iterator(): Iterator<View> = object : Iterator<View> {
-            private var nextValue: View? = null
-            private var done = false
-            private var position: Int = 0
-
-            override fun hasNext(): Boolean {
-                if (nextValue == null && !done) {
-                    nextValue = getChildAt(position)
-                    position++
-                    if (nextValue == null) done = true
-                }
-                return nextValue != null
-            }
-
-            override fun next(): View {
-                if (!hasNext()) {
-                    throw NoSuchElementException()
-                }
-                val answer = nextValue
-                nextValue = null
-                return answer!!
-            }
-        }
-    }
-
-    fun Context.hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
 
     override fun addEditTextToLayout(criteria: SearchCriteria) {
         val addView = EditText(context)

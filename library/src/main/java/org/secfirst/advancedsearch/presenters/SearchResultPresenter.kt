@@ -1,25 +1,25 @@
-package org.secfirst.advancedsearch.mvp.presentation
+package org.secfirst.advancedsearch.presenters
 
 import android.content.Intent
 import org.secfirst.advancedsearch.*
+import org.secfirst.advancedsearch.interfaces.DataProvider
 import org.secfirst.advancedsearch.models.FieldTypes
 import org.secfirst.advancedsearch.models.SearchCriteria
 import org.secfirst.advancedsearch.models.SearchResult
 import org.secfirst.advancedsearch.models.SearchTerm
-import org.secfirst.advancedsearch.mvp.Presenter
+import org.secfirst.advancedsearch.util.mvp.Presenter
 import org.secfirst.advancedsearch.util.mvp.SameThreadSpec
 import org.secfirst.advancedsearch.util.mvp.ThreadSpec
-import org.secfirst.advancedsearch.mvp.data.SegmentDao
 import rx.Observable
 import java.util.logging.Logger
 
-class SearchResultPresenter(private val segmentDao: SegmentDao?,
+class SearchResultPresenter(private val dataProvider: DataProvider,
                             private val criteriaList: List<SearchCriteria>,
                             threadSpec: ThreadSpec = SameThreadSpec()
 ) :
     Presenter<SearchResultPresenter.View>(threadSpec) {
 
-    private val TAG = javaClass.simpleName
+    private val tag = javaClass.simpleName
 
     override fun onViewAttached(view: View) {
         super.onViewAttached(view)
@@ -83,25 +83,19 @@ class SearchResultPresenter(private val segmentDao: SegmentDao?,
         searchTerm: SearchTerm,
         criteriaMap: HashMap<String, SearchCriteria>
     ) {
-        Logger.getLogger(TAG).info("Searching for ${searchTerm}")
+        Logger.getLogger(tag).info("Searching for ${searchTerm}")
         view.resetResults()
         view.displaySearchTerm(searchTerm.text)
         bg {
-            segmentDao?.findByCriteria(searchTerm.text, criteriaMap["category"]?.searchFor ?: "", criteriaMap["difficulty"]?.searchFor ?: "")?.subscribe { segmentList ->
+            dataProvider.findByCriteria(searchTerm.text, criteriaMap["category"]?.searchFor ?: "", criteriaMap["difficulty"]?.searchFor ?: "").subscribe { segmentList: List<SearchResult> ->
                 when (segmentList.isNotEmpty()) {
                     true -> {
                         ui {
                             view.hideEmptyView()
                             view.hideErrorView()
                             view.showResultsView()
-                            segmentList.forEach { Logger.getLogger(TAG).info("Result $it") }
-                            view.addResultsToAdapter(*segmentList.map {
-                                SearchResult(
-                                    it.title,
-                                    it.text,
-                                    "deeplink"
-                                )
-                            }.toTypedArray())
+                            segmentList.forEach { Logger.getLogger(tag).info("Result $it") }
+                            view.addResultsToAdapter(*segmentList.toTypedArray())
                             view.displaySearchTermWithResultCount(searchTerm.text, segmentList.size)
                         }
                     }

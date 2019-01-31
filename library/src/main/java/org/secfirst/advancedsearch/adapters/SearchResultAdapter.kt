@@ -1,4 +1,4 @@
-package org.secfirst.advancedsearch.mvp.adapters
+package org.secfirst.advancedsearch.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.search_result_item.view.*
-import org.secfirst.advancedsearch.R
+import org.secfirst.advancedsearch.library.R
 import org.secfirst.advancedsearch.models.SearchResult
 
 class SearchResultAdapter(private val results : MutableList<SearchResult>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {

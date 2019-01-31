@@ -7,7 +7,6 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment
 
 @Dao

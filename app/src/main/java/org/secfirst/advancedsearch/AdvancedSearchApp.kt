@@ -1,4 +1,4 @@
-package org.secfirst.advancedsearch.util
+package org.secfirst.advancedsearch
 
 import android.app.Application
 import androidx.room.Room
@@ -9,7 +9,7 @@ import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.AppDatabase
 import java.util.concurrent.Executors
 
-class Global: Application() {
+class AdvancedSearchApp: Application() {
 
     var db: AppDatabase? = null
 
@@ -21,11 +21,11 @@ class Global: Application() {
             AppDatabase::class.java, "umbrella.db"
         ).setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
-        Stetho.initializeWithDefaults(this@Global)
+        Stetho.initializeWithDefaults(this@AdvancedSearchApp)
     }
 
     companion object {
-        lateinit var instance: Global
+        lateinit var instance: AdvancedSearchApp
             private set
     }
 

@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment
-import org.secfirst.advancedsearch.util.Global
 import java.util.logging.Logger
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createRecords(): Disposable? {
-        return Global.instance.db?.segmentDao()?.getAll()?.subscribe {
+        return AdvancedSearchApp.instance.db?.segmentDao()?.getAll()?.subscribe {
             if (it.isEmpty()) {
                 val segmentsToInsert = arrayOf(
                     Segment(
@@ -82,8 +81,8 @@ class MainActivity : AppCompatActivity() {
                         category = Category("information", "Information", "")
                     )
                 )
-                Global.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.subscribe {
-                    Logger.getLogger("createRecords").info("krneki")
+                AdvancedSearchApp.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.subscribe {
+                    Logger.getLogger("createRecords").info("Done")
                 } ?: kotlin.run {
                     Logger.getLogger("createRecords").info("There was an error inserting the records")
                 }

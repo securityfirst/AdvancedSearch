@@ -1,6 +1,5 @@
-package org.secfirst.advancedsearch.mvp
+package org.secfirst.advancedsearch.util.mvp
 
-import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import rx.Observable
 import rx.Subscription
 import rx.schedulers.Schedulers
