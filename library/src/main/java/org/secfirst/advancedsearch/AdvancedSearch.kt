@@ -2,6 +2,7 @@ package org.secfirst.advancedsearch
 
 import android.app.SearchManager
 import android.content.Intent
+import org.secfirst.advancedsearch.models.SearchTerm
 
 open class AdvancedSearch {
 

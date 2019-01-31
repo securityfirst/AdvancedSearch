@@ -4,12 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.search_result_item.view.*
 import org.secfirst.advancedsearch.R
-import org.secfirst.advancedsearch.SearchResult
+import org.secfirst.advancedsearch.models.SearchResult
 
-class SearchResultAdapter(val results : MutableList<SearchResult>, val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchResultAdapter(private val results : MutableList<SearchResult>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return SearchResultViewHolder(LayoutInflater.from(context).inflate(R.layout.search_result_item, parent, false))
@@ -32,7 +33,7 @@ class SearchResultAdapter(val results : MutableList<SearchResult>, val context: 
     }
 
     class SearchResultViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        val resultTitle = view.searchResultTitle
+        val resultTitle: TextView = view.searchResultTitle
     }
 
 }

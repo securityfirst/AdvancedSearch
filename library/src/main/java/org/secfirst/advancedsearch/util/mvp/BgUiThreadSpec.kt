@@ -1,8 +1,8 @@
-package org.secfirst.advancedsearch.util
+package org.secfirst.advancedsearch.util.mvp
 
 import android.os.Handler
 import android.os.Looper
-import org.secfirst.advancedsearch.mvp.ThreadSpec
+import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import java.util.concurrent.ExecutorService
 
 class BgUiThreadSpec(private val executor: ExecutorService) : ThreadSpec {

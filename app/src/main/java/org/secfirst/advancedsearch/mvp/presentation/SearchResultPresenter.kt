@@ -2,16 +2,21 @@ package org.secfirst.advancedsearch.mvp.presentation
 
 import android.content.Intent
 import org.secfirst.advancedsearch.*
+import org.secfirst.advancedsearch.models.FieldTypes
+import org.secfirst.advancedsearch.models.SearchCriteria
+import org.secfirst.advancedsearch.models.SearchResult
+import org.secfirst.advancedsearch.models.SearchTerm
 import org.secfirst.advancedsearch.mvp.Presenter
-import org.secfirst.advancedsearch.mvp.SameThreadSpec
-import org.secfirst.advancedsearch.mvp.ThreadSpec
+import org.secfirst.advancedsearch.util.mvp.SameThreadSpec
+import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.SegmentDao
 import rx.Observable
 import java.util.logging.Logger
 
 class SearchResultPresenter(private val segmentDao: SegmentDao?,
                             private val criteriaList: List<SearchCriteria>,
-                            threadSpec: ThreadSpec = SameThreadSpec()) :
+                            threadSpec: ThreadSpec = SameThreadSpec()
+) :
     Presenter<SearchResultPresenter.View>(threadSpec) {
 
     private val TAG = javaClass.simpleName

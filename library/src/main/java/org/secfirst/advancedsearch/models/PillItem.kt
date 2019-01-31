@@ -1,4 +1,4 @@
-package org.secfirst.advancedsearch.mvp.models
+package org.secfirst.advancedsearch.models
 
 import pe.orbis.materialpillsbox.PillEntity
 

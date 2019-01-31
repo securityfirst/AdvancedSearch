@@ -13,25 +13,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding.view.clicks
-import com.jakewharton.rxbinding.view.selected
 import com.jakewharton.rxrelay.BehaviorRelay
 import kotlinx.android.synthetic.main.search_view.view.*
-import org.secfirst.advancedsearch.FieldTypes
+import org.secfirst.advancedsearch.models.FieldTypes
 import org.secfirst.advancedsearch.R
 import org.secfirst.advancedsearch.mvp.adapters.SearchResultAdapter
-import org.secfirst.advancedsearch.mvp.models.PillItem
-import org.secfirst.advancedsearch.SearchCriteria
-import org.secfirst.advancedsearch.SearchResult
+import org.secfirst.advancedsearch.models.PillItem
+import org.secfirst.advancedsearch.models.SearchCriteria
+import org.secfirst.advancedsearch.models.SearchResult
 import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.presentation.SearchResultPresenter
 import org.secfirst.advancedsearch.util.Global
 import org.secfirst.advancedsearch.util.SelectablePillBox
-import pe.orbis.materialpillsbox.MaterialPillsBox
 import pe.orbis.materialpillsbox.OnPillClickListener
 import pe.orbis.materialpillsbox.PillEntity
 import rx.Observable
-import java.sql.Array
 import java.util.logging.Logger
 
 class SearchResultView @JvmOverloads constructor(
@@ -60,9 +57,23 @@ class SearchResultView @JvmOverloads constructor(
         val categoryOptions = categories.map { it.title }
         val difficultyOptions = difficulties.map { it.name }
         val criteria = mutableListOf<SearchCriteria>()
-        criteria.add(SearchCriteria("category", FieldTypes.PILLBOX, categoryOptions,null))
-        criteria.add(SearchCriteria("difficulty", FieldTypes.STRING, difficultyOptions,null))
-        criteria.add(SearchCriteria("text", FieldTypes.FREE_TEXT, null,null))
+        criteria.add(
+            SearchCriteria(
+                "category",
+                FieldTypes.PILLBOX,
+                categoryOptions,
+                null
+            )
+        )
+        criteria.add(
+            SearchCriteria(
+                "difficulty",
+                FieldTypes.STRING,
+                difficultyOptions,
+                null
+            )
+        )
+        criteria.add(SearchCriteria("text", FieldTypes.FREE_TEXT, null, null))
 
         presenter = SearchResultPresenter(
             Global.instance.db?.segmentDao(),

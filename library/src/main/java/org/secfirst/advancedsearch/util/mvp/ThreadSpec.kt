@@ -1,4 +1,4 @@
-package org.secfirst.advancedsearch.mvp
+package org.secfirst.advancedsearch.util.mvp
 
 interface ThreadSpec {
     fun bg(function: () -> Unit)

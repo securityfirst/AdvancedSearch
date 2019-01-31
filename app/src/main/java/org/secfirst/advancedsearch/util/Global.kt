@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.facebook.stetho.Stetho
-import org.secfirst.advancedsearch.mvp.ThreadSpec
+import org.secfirst.advancedsearch.util.mvp.BgUiThreadSpec
+import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.AppDatabase
 import java.util.concurrent.Executors
 
