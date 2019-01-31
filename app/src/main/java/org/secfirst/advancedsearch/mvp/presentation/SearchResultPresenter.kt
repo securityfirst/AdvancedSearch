@@ -19,23 +19,7 @@ class SearchResultPresenter(private val segmentDao: SegmentDao?,
     override fun onViewAttached(view: View) {
         super.onViewAttached(view)
 
-        criteriaList.forEach {
-            when(it.type) {
-                FieldTypes.STRING -> {
-                    view.addEditTextToLayout(it)
-                }
-                FieldTypes.PILLBOX -> {
-                    view.addPillboxToLayout(it)
-                }
-                FieldTypes.FREE_TEXT -> {
-                    view.addMainTextToLayout(it)
-                }
-                else -> {
-                    view.addEditTextToLayout(it)
-                }
-            }
-
-        }
+        setSearchFields(view)
 
         view.onSearchClicked().subscribeUntilDetached { list ->
             val filters = list.map { it }
@@ -61,6 +45,32 @@ class SearchResultPresenter(private val segmentDao: SegmentDao?,
             view.toggleAdvancedCriteria()
         }
 
+        view.onCancelClicked().subscribeUntilDetached {
+            view.resetResults()
+            view.emptyFields()
+            setSearchFields(view)
+        }
+
+    }
+
+    private fun setSearchFields(view: View) {
+        criteriaList.forEach {
+            when(it.type) {
+                FieldTypes.STRING -> {
+                    view.addEditTextToLayout(it)
+                }
+                FieldTypes.PILLBOX -> {
+                    view.addPillboxToLayout(it)
+                }
+                FieldTypes.FREE_TEXT -> {
+                    view.addMainTextToLayout(it)
+                }
+                else -> {
+                    view.addEditTextToLayout(it)
+                }
+            }
+
+        }
     }
 
     private fun performSearch(
@@ -111,6 +121,7 @@ class SearchResultPresenter(private val segmentDao: SegmentDao?,
     interface View: Presenter.View {
         fun onIntentReceived(): Observable<Intent>
         fun onSearchClicked(): Observable<List<Pair<String, String>>>
+        fun onCancelClicked(): Observable<Unit>
 
         fun displaySearchTerm(searchTerm: String)
         fun passIntent(intent: Intent)
@@ -131,5 +142,6 @@ class SearchResultPresenter(private val segmentDao: SegmentDao?,
         fun addEditTextToLayout(criteria: SearchCriteria)
         fun addMainTextToLayout(criteria: SearchCriteria)
         fun displaySearchTermWithResultCount(searchTerm: String, count: Int)
+        fun emptyFields()
     }
 }

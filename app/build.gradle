@@ -33,6 +33,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$android_support_version"
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
@@ -47,15 +48,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    def room_version = "2.1.0-alpha03"
-
     implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version" // use kapt for Kotlin
-    // optional - RxJava support for Room
+    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
-    // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
-    // optional - Coroutines support for Room
     implementation "androidx.room:room-coroutines:$room_version"
 
     api project(path: ':library')

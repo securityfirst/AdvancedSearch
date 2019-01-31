@@ -1,15 +1,19 @@
 package org.secfirst.advancedsearch.mvp.views
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding.view.clicks
+import com.jakewharton.rxbinding.view.selected
 import com.jakewharton.rxrelay.BehaviorRelay
 import kotlinx.android.synthetic.main.search_view.view.*
 import org.secfirst.advancedsearch.FieldTypes
@@ -22,9 +26,12 @@ import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.presentation.SearchResultPresenter
 import org.secfirst.advancedsearch.util.Global
+import org.secfirst.advancedsearch.util.SelectablePillBox
 import pe.orbis.materialpillsbox.MaterialPillsBox
 import pe.orbis.materialpillsbox.OnPillClickListener
+import pe.orbis.materialpillsbox.PillEntity
 import rx.Observable
+import java.sql.Array
 import java.util.logging.Logger
 
 class SearchResultView @JvmOverloads constructor(
@@ -41,27 +48,13 @@ class SearchResultView @JvmOverloads constructor(
     override fun onIntentReceived(): Observable<Intent> = intentReceivedRelay
     override fun onSearchClicked(): Observable<List<Pair<String, String>>> = searchAppliedRelay
     override fun onAdvancedToggleClick(): Observable<Unit> = advancedCriteriaToggle.clicks()
+    override fun onCancelClicked(): Observable<Unit> = searchCancel.clicks()
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         searchResultsListView.adapter = searchResultAdapter
 
-        val objects = ArrayList<PillItem>()
-        objects.add(PillItem("First"))
-        objects.add(PillItem("Second"))
-        val pillsBox: MaterialPillsBox = mtbArea
-        pillsBox.initFirstSetup(objects as List<Any>?)
-        pillsBox.setOnPillClickListener(object  : OnPillClickListener {
-            override fun onCloseIconClick(p0: View?, p1: Int) {
-                Logger.getLogger("blah").info("event close: view text $p0, object ${objects[p1]}")
-            }
-
-            override fun onPillClick(p0: View?, p1: Int) {
-                Logger.getLogger("blah").info("event click: view text $p0, object ${objects[p1].name}")
-            }
-
-        })
         val categories = listOf(Category("personal", "Personal", ""), Category("information", "Information", ""))
         val difficulties = listOf(Difficulty("beginner", "Beginner"), Difficulty("advanced", "Advanced"))
         val categoryOptions = categories.map { it.title }
@@ -78,19 +71,35 @@ class SearchResultView @JvmOverloads constructor(
         )
         presenter?.onViewAttached(this)
         passIntent((context as AppCompatActivity).intent)
+        val list = mutableListOf<Pair<String, String>>()
         searchApply.setOnClickListener {
-            val list: List<Pair<String, String>> = (0..criteriaLayout.childCount).filter {
-                criteriaLayout.getChildAt(it) != null && (criteriaLayout.getChildAt(it) as EditText).text.toString().isNotEmpty()
-            }.map {
-                val child = criteriaLayout.getChildAt(it)
-                Pair(child.tag as String, (child as EditText).text.toString())
-            }
-            if (list.isEmpty()) {
-                Logger.getLogger("aaa").info("empty list")
-            } else {
-                Logger.getLogger("aaa").info(list.joinToString { "\'${it.first} ${it.second}\'" })
+            (criteriaLayout as ViewGroup).asSequence().iterator().forEach {criteriaChild ->
+                when(criteriaChild) {
+                    is EditText -> {
+                        list.add(Pair(criteriaChild.tag as String, criteriaChild.text.toString()))
+                    }
+                    is LinearLayout -> {
+                        (0..criteriaChild.childCount).filter {
+                            criteriaChild.getChildAt(it) != null
+                        }.forEach {item ->
+                            val linearLayoutChild = criteriaChild.getChildAt(item)
+                            Logger.getLogger("ccc").info("${linearLayoutChild::class.qualifiedName}")
+                            linearLayoutChild?.let {
+                                when(linearLayoutChild) {
+                                    is SelectablePillBox -> {
+                                        if (linearLayoutChild.selectedItems.isNotEmpty()) {
+                                            list.add(Pair(linearLayoutChild.tag as String, linearLayoutChild.selectedItems[0]))
+                                        }
+                                    }
+                                    else -> Logger.getLogger("bbb").info("${linearLayoutChild::class.qualifiedName}")
+                                }
+                            }
+                        }
+                    }
+                }
             }
             searchAppliedRelay.call(list)
+            context.hideKeyboard(searchResultView)
         }
     }
 
@@ -107,7 +116,7 @@ class SearchResultView @JvmOverloads constructor(
         searchTermView.visibility = View.VISIBLE
         searchTermView.text = context.getString(R.string.results_while_searching, searchTerm)
         (0..criteriaLayout.childCount).forEach {
-            if (criteriaLayout.getChildAt(it) != null && criteriaLayout.getChildAt(it).tag.equals("text")) {
+            if (criteriaLayout.getChildAt(it)?.tag?.equals("text") == true) {
                 (criteriaLayout.getChildAt(it) as EditText).setText(searchTerm)
             }
         }
@@ -171,7 +180,23 @@ class SearchResultView @JvmOverloads constructor(
     }
 
     override fun addPillboxToLayout(criteria: SearchCriteria) {
-        Logger.getLogger("aaa").info(criteria.values?.toTypedArray().toString())
+        val layout = LinearLayout(context)
+        layout.orientation = LinearLayout.VERTICAL
+        val objects = mutableListOf<PillEntity>()
+        val pillsBox = LayoutInflater.from(context).inflate(R.layout.pill_item, null) as SelectablePillBox
+        pillsBox.tag = criteria.name
+        pillsBox.initFirstSetup(objects as List<Any>?)
+        pillsBox.setOnPillClickListener(object  : OnPillClickListener {
+            override fun onCloseIconClick(p0: View?, p1: Int) {
+                objects[p1].let {
+                    objects.removeAt(p1)
+                    pillsBox.notifyDataSetChanged()
+                }
+            }
+
+            override fun onPillClick(p0: View?, p1: Int) {
+            }
+        })
         val adapter = ArrayAdapter<String>(
             context,
             android.R.layout.simple_dropdown_item_1line,
@@ -179,11 +204,74 @@ class SearchResultView @JvmOverloads constructor(
         )
         val addView = AutoCompleteTextView(context)
         addView.setAdapter(adapter)
+        addView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            adapter.getItem(position)?.let {
+                objects.add(PillItem(it))
+                pillsBox.setObjects(objects)
+                pillsBox.notifyDataSetChanged()
+                addView.setText("")
+            }
+        }
         addView.threshold = 1
         addView.hint = criteria.name
-        addView.tag = criteria.name
-        criteriaLayout.addView(addView)
+        layout.tag = criteria.name
+        layout.addView(pillsBox)
+        layout.addView(addView)
+        criteriaLayout.addView(layout)
     }
+
+    fun refreshSearchCriteriaByTag(criteria: SearchCriteria) {
+        (criteriaLayout as ViewGroup).asSequence().iterator().forEach {
+            if (it.tag == criteria.name) {
+                when(criteria.type) {
+                    FieldTypes.STRING -> {
+                        addEditTextToLayout(criteria)
+                    }
+                    FieldTypes.PILLBOX -> {
+                        addPillboxToLayout(criteria)
+                    }
+                    FieldTypes.FREE_TEXT -> {
+                        addMainTextToLayout(criteria)
+                    }
+                    else -> {
+                        addEditTextToLayout(criteria)
+                    }
+                }
+            }
+        }
+    }
+
+    fun ViewGroup.asSequence(): Sequence<View> = object : Sequence<View> {
+        override fun iterator(): Iterator<View> = object : Iterator<View> {
+            private var nextValue: View? = null
+            private var done = false
+            private var position: Int = 0
+
+            override fun hasNext(): Boolean {
+                if (nextValue == null && !done) {
+                    nextValue = getChildAt(position)
+                    position++
+                    if (nextValue == null) done = true
+                }
+                return nextValue != null
+            }
+
+            override fun next(): View {
+                if (!hasNext()) {
+                    throw NoSuchElementException()
+                }
+                val answer = nextValue
+                nextValue = null
+                return answer!!
+            }
+        }
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
 
     override fun addEditTextToLayout(criteria: SearchCriteria) {
         val addView = EditText(context)
@@ -199,5 +287,10 @@ class SearchResultView @JvmOverloads constructor(
         addView.tag = criteria.name
         addView.hint = criteria.name
         criteriaLayout.addView(addView)
+    }
+
+    override fun emptyFields() {
+        criteriaLayout.removeAllViewsInLayout()
+        hideSearchTermView()
     }
 }
