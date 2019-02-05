@@ -20,6 +20,7 @@ import org.secfirst.advancedsearch.models.PillItem
 import org.secfirst.advancedsearch.models.SearchCriteria
 import org.secfirst.advancedsearch.models.SearchResult
 import org.secfirst.advancedsearch.presenters.SearchResultPresenter
+import org.secfirst.advancedsearch.util.HeaderViewDecoration
 import org.secfirst.advancedsearch.util.SelectablePillBox
 import org.secfirst.advancedsearch.util.asSequence
 import org.secfirst.advancedsearch.util.hideKeyboard
@@ -62,8 +63,8 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        presenter.onViewAttached(this)
         setSearchResultsListView()
+        presenter.onViewAttached(this)
         setApplyClickListener()
         passIntent((context as AppCompatActivity).intent)
     }
@@ -71,6 +72,8 @@ class SearchResultView @JvmOverloads constructor(
     private fun setSearchResultsListView() {
         searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         searchResultsListView.adapter = searchResultAdapter
+        val view = LayoutInflater.from(context).inflate(R.layout.search_result_header_item, null)
+        searchResultsListView.addItemDecoration(HeaderViewDecoration(view))
     }
 
     private fun setApplyClickListener() {
@@ -141,7 +144,8 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun displaySearchTermWithResultCount(searchTerm: String, count: Int) {
         searchTermView.visibility = View.VISIBLE
-        searchTermView.text = "$count ${context.getString(R.string.results_while_searching, searchTerm)}"
+        resultCount.text = context.getString(R.string.results_for_this_query, count)
+        searchTermView.text = context.getString(R.string.results_while_searching, searchTerm)
 
     }
 
@@ -190,10 +194,12 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun showAdvancedCriteria() {
         advancedCriteriaPanel.visibility = View.VISIBLE
+        advancedCriteriaToggleCaret.setImageResource(R.drawable.outline_collapse)
     }
 
     override fun hideAdvancedCriteria() {
         advancedCriteriaPanel.visibility = View.GONE
+        advancedCriteriaToggleCaret.setImageResource(R.drawable.outline_expand)
     }
 
     override fun addPillboxToLayout(criteria: SearchCriteria) {
