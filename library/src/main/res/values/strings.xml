@@ -6,5 +6,7 @@
     <string name="no_search_term">No search term present</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
-    <string name="results_while_searching">results while searching for %1$s</string>
+    <string name="results_while_searching">results while searching for \"%1$s\"</string>
+    <string name="results_for_this_query">%1$d results found for this query</string>
+    <string name="advanced">Advanced</string>
 </resources>

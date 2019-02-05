@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="resultTitle">#FF87bd34</color>
+    <color name="neutralBackground">#e5e5e5</color>
+    <color name="advancedCriteriaBackground">#f2f2f2</color>
+</resources>
