@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        centerText.text = ""
         createRecords()
     }
 
@@ -52,12 +51,10 @@ class MainActivity : AppCompatActivity() {
 
             })
         }
-        Logger.getLogger(javaClass.simpleName).info("on create options menu")
         return true
     }
 
     override fun onSearchRequested(): Boolean {
-        Logger.getLogger(javaClass.simpleName).info("search requested")
         return super.onSearchRequested()
     }
 
@@ -68,35 +65,90 @@ class MainActivity : AppCompatActivity() {
                     Segment(
                         id = "first",
                         title = "First title",
-                        text = "<h2 id=\"organisefiles\">Organise files.</h2>\n" +
+                        text = "<h1>Arrivals or Departures</h1>\n" +
                                 "\n" +
-                                "<pre><code>Move all folders containing documents to back up into a single location, such as My Documents.\n" +
-                                "</code></pre>\n" +
+                                "<h2>Prepare for anything</h2>\n" +
                                 "\n" +
-                                "<h2 id=\"seeifprogramsandappswithstoragedatabaseswillallowyoutochooseanewstoragelocation\">See if programs and apps with storage databases will allow you to choose a new storage location.</h2>\n" +
+                                "<p>Assume that:</p>\n" +
                                 "\n" +
-                                "<pre><code>If so,  put them in the same folder.\n" +
-                                "</code></pre>\n" +
+                                "<ul>\n" +
+                                "<li>You will be searched.</li>\n" +
+                                "<li>Anything written will be read or copied.</li>\n" +
+                                "<li>Your equipment will be confiscated.</li>\n" +
+                                "</ul>\n" +
                                 "\n" +
-                                "<h2 id=\"createaregularbackupschedule\">Create a regular backup schedule.</h2>\n" +
+                                "<p><em>Note: Authorities may delay you or seize your devices if you refuse to give up a password or unlock your device.</em></p>\n" +
                                 "\n" +
-                                "<pre><code>Set a calendar reminder.\n" +
-                                "</code></pre>\n" +
+                                "<p>(Learn more about this in <a href=\"umbrella://lesson/passwords/2\">passwords expert</a>.)</p>\n" +
                                 "\n" +
-                                "<h2 id=\"establishbackupproceduresforfamilyandcolleagues\">Establish backup procedures for family and colleagues.</h2>\n" +
+                                "<h2>Know your cover story</h2>\n" +
                                 "\n" +
-                                "<pre><code>Help them understand the risk of data loss.\n" +
-                                "</code></pre>\n" +
+                                "<p>What you reveal to border authorities depends on context and risk.</p>\n" +
                                 "\n" +
-                                "<h2 id=\"testtheprocessyouwillusetorecoverdatafromyourbackup\">Test the process you will use to recover data from your backup.</h2>\n" +
+                                "<p>(Learn about risk assessment for travel <a href=\"umbrella://lesson/preparation\">preparation</a>.)</p>\n" +
                                 "\n" +
-                                "<pre><code>Recovery matters more than anything!\n" +
-                                "</code></pre>\n" +
+                                "<p>A cover story does not have to be the full truth, but it should be:</p>\n" +
                                 "\n" +
-                                "<h2 id=\"storebackupssecurely\">Store backups securely.</h2>\n" +
+                                "<ul>\n" +
+                                "<li>Simple;</li>\n" +
+                                "<li>Easily repeatable;</li>\n" +
+                                "<li>Verifiable.</li>\n" +
+                                "</ul>\n" +
                                 "\n" +
-                                "<pre><code>Backups must be separate from the original information. Don't keep your a USB stick with work backups in your office!\n" +
-                                "</code></pre>",
+                                "<p>It may not be wise, or possible, to lie, but neither should you volunteer information.</p>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li><p>Provide minimal details.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Be prepared to be questioned about recent travel, visas or passport stamps.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Border authorities may require certain information, like where you will stay. Decide in advance how much to reveal.</p></li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<p><em>Note: Providing real information may increase your risk, but providing false information may be a red flag.</em></p>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li>Set boundaries in advance. What sensitive information will you absolutely not reveal?</li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<h2>Coordinate</h2>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li><p>Agree what you will say with your team and set boundaries in advance.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Teams may attract attention. Travel and approach immigration separately.</p></li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<p><em>Note: Authorities may already be aware that a big team is planning a visit or a meeting.</em></p>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li>Set a place to meet after immigration.</li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<h2>Bring something else to do.</h2>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li>Keep phone and Wi-Fi off, except in an emergency.<br />\n" +
+                                "</li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<p><em>Note: Airport networks are notorious targets for surveillance and malware. Do not connect to airport Wi-Fi.</em></p>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li><p>In case of delay or emergency, set a time to turn on phones and check in.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Working may attract attention, especially if you are travelling low profile.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Do not discuss your trip, either with your team or on the phone. You may be overheard.</p></li>\n" +
+                                "</ul>\n" +
+                                "\n" +
+                                "<h2>Remember:</h2>\n" +
+                                "\n" +
+                                "<ul>\n" +
+                                "<li><p>Be polite, calm, confidant, and firm with border authorities.</p></li>\n" +
+                                "\n" +
+                                "<li><p>Do not get separated from your belongings, especially electronic items. If they are taken away, assume they are compromised.</p></li>\n" +
+                                "</ul>",
                         difficulty = Difficulty("advanced", "Advanced"),
                         category = Category("personal", "Personal", "")
                     ),
