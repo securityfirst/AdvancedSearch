@@ -1,3 +1,5 @@
 package org.secfirst.advancedsearch.models
 
-data class SearchResult(val title: String, val summary: String, val deepLink: String)
+import android.content.Context
+
+data class SearchResult(val title: String, val summary: String, val listener: (c: Context) -> Unit = {})
