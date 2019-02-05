@@ -20,7 +20,6 @@ import org.secfirst.advancedsearch.models.PillItem
 import org.secfirst.advancedsearch.models.SearchCriteria
 import org.secfirst.advancedsearch.models.SearchResult
 import org.secfirst.advancedsearch.presenters.SearchResultPresenter
-import org.secfirst.advancedsearch.util.HeaderViewDecoration
 import org.secfirst.advancedsearch.util.SelectablePillBox
 import org.secfirst.advancedsearch.util.asSequence
 import org.secfirst.advancedsearch.util.hideKeyboard
@@ -72,8 +71,6 @@ class SearchResultView @JvmOverloads constructor(
     private fun setSearchResultsListView() {
         searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         searchResultsListView.adapter = searchResultAdapter
-        val view = LayoutInflater.from(context).inflate(R.layout.search_result_header_item, null)
-        searchResultsListView.addItemDecoration(HeaderViewDecoration(view))
     }
 
     private fun setApplyClickListener() {
@@ -159,6 +156,8 @@ class SearchResultView @JvmOverloads constructor(
 
     override fun resetResults() {
         searchResultAdapter.reset()
+        resultCount.text = ""
+
     }
 
     override fun hideEmptyView() {
@@ -248,7 +247,7 @@ class SearchResultView @JvmOverloads constructor(
             val adapter = ArrayAdapter<String>(
                 context,
                 android.R.layout.simple_dropdown_item_1line,
-                criteria.values?.toTypedArray() ?: arrayOf()
+                criteria.values.toTypedArray()
             )
             val addView = AutoCompleteTextView(context)
             addView.setAdapter(adapter)
