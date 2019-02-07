@@ -2,14 +2,14 @@ package org.secfirst.advancedsearch.views
 
 import android.content.Context
 import android.content.Intent
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxrelay.BehaviorRelay
 import kotlinx.android.synthetic.main.search_view.view.*

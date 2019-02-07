@@ -1,8 +1,8 @@
 package org.secfirst.advancedsearch
 
 import android.app.Application
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
 import org.secfirst.advancedsearch.util.mvp.BgUiThreadSpec
 import org.secfirst.advancedsearch.util.mvp.ThreadSpec
 import org.secfirst.advancedsearch.mvp.data.AppDatabase
@@ -17,7 +17,8 @@ class AdvancedSearchApp: Application() {
         instance = this
         db = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "umbrella.db"
+            AppDatabase::class.java,
+            "umbrella.db"
         ).setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }

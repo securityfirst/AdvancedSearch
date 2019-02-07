@@ -1,12 +1,8 @@
 package org.secfirst.advancedsearch.mvp.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import android.arch.persistence.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import org.secfirst.advancedsearch.mvp.models.Segment
 
@@ -30,8 +26,8 @@ interface SegmentDao {
     fun findByCriteria(title: String, category: String, difficulty: String): Flowable<List<Segment>>
 
     @Insert
-    fun insertAll(vararg segment: Segment) : Completable
+    fun insertAll(vararg segment: Segment) : Array<Long>
 
     @Delete
-    fun delete(segment: Segment) : Single<Int>
+    fun delete(segment: Segment) : Int
 }

@@ -7,7 +7,7 @@
               android:paddingBottom="10dp"
               android:layout_height="wrap_content">
     
-    <com.google.android.material.card.MaterialCardView
+    <android.support.design.card.MaterialCardView
             android:layout_width="match_parent"
             android:minHeight="20dp"
             style="@style/Widget.MaterialComponents.CardView"
@@ -36,7 +36,7 @@
         </LinearLayout>
         
         
-    </com.google.android.material.card.MaterialCardView>
+    </android.support.design.card.MaterialCardView>
     
 
 </LinearLayout>

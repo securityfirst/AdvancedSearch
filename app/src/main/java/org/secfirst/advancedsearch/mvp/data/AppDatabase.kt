@@ -1,7 +1,7 @@
 package org.secfirst.advancedsearch.mvp.data
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.RoomDatabase
 import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment

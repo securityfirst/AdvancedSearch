@@ -1,10 +1,11 @@
 package org.secfirst.advancedsearch.mvp.models
 
-import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import android.support.annotation.NonNull
+
 
 @Entity(tableName = "segment")
 data class Segment (

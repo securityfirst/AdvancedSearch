@@ -1,13 +1,8 @@
 package org.secfirst.advancedsearch.mvp.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import io.reactivex.Completable
+import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 
 @Dao
@@ -22,8 +17,8 @@ interface DifficultyDao {
     fun findByName(name: String): Maybe<Difficulty>
 
     @Insert
-    fun insertAll(vararg difficulty: Difficulty) : Completable
+    fun insertAll(vararg difficulty: Difficulty) : List<Long>
 
     @Delete
-    fun delete(difficulty: Difficulty) : Single<Int>
+    fun delete(difficulty: Difficulty) : Int
 }

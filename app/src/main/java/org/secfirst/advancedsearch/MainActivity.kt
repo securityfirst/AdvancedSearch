@@ -4,10 +4,9 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.view.Menu
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import kotlinx.android.synthetic.main.activity_main.*
 import org.secfirst.advancedsearch.mvp.models.Category
 import org.secfirst.advancedsearch.mvp.models.Difficulty
 import org.secfirst.advancedsearch.mvp.models.Segment
@@ -185,9 +184,9 @@ class MainActivity : AppCompatActivity() {
                         category = Category("information", "Information", "")
                     )
                 )
-                AdvancedSearchApp.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.subscribe {
+                AdvancedSearchApp.instance.db?.segmentDao()?.insertAll(*segmentsToInsert)?.let {
                     Logger.getLogger("createRecords").info("Done")
-                }?.dispose() ?: kotlin.run {
+                } ?: kotlin.run {
                     Logger.getLogger("createRecords").info("There was an error inserting the records")
                 }
             }

@@ -3,8 +3,8 @@ package org.secfirst.advancedsearch
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import org.secfirst.advancedsearch.interfaces.AdvancedSearchPresenter
 import org.secfirst.advancedsearch.interfaces.DataProvider

@@ -1,9 +1,9 @@
 package org.secfirst.advancedsearch.mvp.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -22,8 +22,8 @@ interface CategoryDao {
     fun findByName(name: String): Maybe<Category>
 
     @Insert
-    fun insertAll(vararg category: Category) : Completable
+    fun insertAll(vararg category: Category) : List<Long>
 
     @Delete
-    fun delete(category: Category) : Single<Int>
+    fun delete(category: Category) : Int
 }

@@ -99,7 +99,7 @@
             android:textSize="@dimen/medSmallTextSize"
             android:layout_height="wrap_content"/>
     
-    <androidx.recyclerview.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/searchResultsListView"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
