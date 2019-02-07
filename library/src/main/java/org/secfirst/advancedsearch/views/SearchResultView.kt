@@ -28,16 +28,36 @@ import pe.orbis.materialpillsbox.PillEntity
 import rx.Observable
 import java.util.logging.Logger
 
-class SearchResultView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), SearchResultPresenter.View {
 
-    init {
-        init(attrs)
+class SearchResultView : FrameLayout, SearchResultPresenter.View {
+
+    constructor(context: Context) : super(context) {
+        initialize(context, null)
     }
 
-    private fun init(attrs: AttributeSet?) {
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        initialize(context, attrs)
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        initialize(context, attrs)
+    }
+
+    private var pillBoxColorFg: Int? = null
+    private var pillBoxColorBg: Int? = null
+
+    private fun initialize(context: Context, attrs: AttributeSet?) {
         View.inflate(context, R.layout.search_view, this)
+
+        attrs?.let {
+            val a = context.obtainStyledAttributes(it,
+                R.styleable.SearchResultView, 0, 0)
+
+            pillBoxColorFg =  a.getColor(R.styleable.SearchResultView_pillbox_color_fg, resources.getColor(R.color.md_deep_purple_600))
+            pillBoxColorBg = a.getColor(R.styleable.SearchResultView_pillbox_color_fg, resources.getColor(R.color.md_white_1000))
+
+            a.recycle()
+        }
     }
 
     private val searchResultAdapter = SearchResultAdapter(mutableListOf(), context)
@@ -205,7 +225,7 @@ class SearchResultView @JvmOverloads constructor(
         val layout = LinearLayout(context)
         layout.orientation = LinearLayout.VERTICAL
         val objects = mutableListOf<PillEntity>()
-        val pillsBox = LayoutInflater.from(context).inflate(R.layout.pill_item, null) as SelectablePillBox
+        val pillsBox = LayoutInflater.from(context).inflate(R.layout.pill_item, this@SearchResultView, false) as SelectablePillBox
         pillsBox.tag = criteria.name
         pillsBox.initFirstSetup(objects as List<Any>?)
         pillsBox.setOnPillClickListener(object  : OnPillClickListener {
@@ -226,7 +246,7 @@ class SearchResultView @JvmOverloads constructor(
         )
         val addView = AutoCompleteTextView(context)
         addView.setAdapter(adapter)
-        addView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        addView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             adapter.getItem(position)?.let {
                 objects.add(PillItem(it))
                 pillsBox.setObjects(objects)

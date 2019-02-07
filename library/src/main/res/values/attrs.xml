@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SearchResultView">
+        <attr name="pillbox_color_fg" format="color|reference" />
+        <attr name="pillbox_color_bg" format="color|reference" />
+    </declare-styleable>
+</resources>
