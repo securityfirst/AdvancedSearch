@@ -58,7 +58,7 @@ class SearchActivity : AppCompatActivity(), AdvancedSearchPresenter {
 
     override fun getDataProvider(): DataProvider = SegmentDaoImpl(AdvancedSearchApp.instance.db?.segmentDao())
 
-    override fun getThreadSpec(): ThreadSpec = AdvancedSearchApp.instance.getThreadSpec()
+    override fun getThreadSpec(): ThreadSpec = AdvancedSearchApp.instance.threadSpec
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
