@@ -78,7 +78,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         view.resetResults()
         view.displaySearchTerm(searchTerm.text)
         bg {
-            dataProvider.findByCriteria(searchTerm.text, *searchTerm.criteria?.map { it.second }?.toTypedArray().orEmpty()).subscribe { segmentList: List<SearchResult> ->
+            dataProvider.findByCriteria(searchTerm.text, *searchTerm.criteria?.toTypedArray() ?: arrayOf()).subscribe { segmentList: List<SearchResult> ->
                 when (segmentList.isNotEmpty()) {
                     true -> {
                         ui {
@@ -110,7 +110,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
 
     interface View: Presenter.View {
         fun onIntentReceived(): Observable<Intent>
-        fun onSearchClicked(): Observable<HashMap<String, String>>
+        fun onSearchClicked(): Observable<HashMap<String, List<String>>>
         fun onCancelClicked(): Observable<Unit>
 
         fun displaySearchTerm(searchTerm: String)

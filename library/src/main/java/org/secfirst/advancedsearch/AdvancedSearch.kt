@@ -17,13 +17,13 @@ open class AdvancedSearch {
             return SearchTerm.NONE
         }
 
-        fun getSearchTermFromCompositeView(filters: HashMap<String, String>): SearchTerm {
+        fun getSearchTermFromCompositeView(filters: HashMap<String, List<String>>): SearchTerm {
             if (filters.size<1) Logger.getLogger("ddd").info("Map empty")
             filters.forEach {
                 Logger.getLogger("ddd").info("${it.key} ${it.value}")
             }
             val result = SearchTerm.NONE
-            result.text = filters["text"].orEmpty()
+            result.text = filters["text"]?.get(0) ?: ""
             filters.remove("text")
             result.criteria = filters.toList()
             return result

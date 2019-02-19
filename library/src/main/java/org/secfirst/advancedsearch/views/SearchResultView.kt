@@ -72,11 +72,11 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
     }
 
     private val intentReceivedRelay = BehaviorRelay.create<Intent>()
-    private val searchAppliedRelay = BehaviorRelay.create<HashMap<String, String>>()
+    private val searchAppliedRelay = BehaviorRelay.create<HashMap<String, List<String>>>()
 
 
     override fun onIntentReceived(): Observable<Intent> = intentReceivedRelay
-    override fun onSearchClicked(): Observable<HashMap<String, String>> = searchAppliedRelay
+    override fun onSearchClicked(): Observable<HashMap<String, List<String>>> = searchAppliedRelay
     override fun onAdvancedToggleClick(): Observable<Unit> = advancedCriteriaToggle.clicks()
     override fun onCancelClicked(): Observable<Unit> = searchCancel.clicks()
 
@@ -98,7 +98,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
 
     private fun setApplyClickListener() {
         searchApply.setOnClickListener {
-            val list = hashMapOf<String, String>()
+            val list = hashMapOf<String, List<String>>()
             (criteriaLayout as ViewGroup)
                 .asSequence()
                 .iterator()
@@ -106,34 +106,39 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
                 when(criteriaChild) {
                     is EditText -> {
                         if (!list.containsKey(criteriaChild.tag as String?)) {
-                            list[criteriaChild.tag as String] = criteriaChild.text.toString()
+                            list[criteriaChild.tag as String] = listOf(criteriaChild.text.toString())
                         }
                     }
                     is AutoCompleteTextView -> {
                         if (!list.containsKey(criteriaChild.tag as String?)) {
-                            list[criteriaChild.tag as String] = criteriaChild.text.toString()
+                            list[criteriaChild.tag as String] = listOf(criteriaChild.text.toString())
                         }
                     }
                     is LinearLayout -> {
                         (0..criteriaChild.childCount)
                             .filterNot { criteriaChild.getChildAt(it) == null }
                             .forEach {item ->
-                            val linearLayoutChild = criteriaChild.getChildAt(item)
-                            when(linearLayoutChild) {
-                                is SelectablePillBox -> {
-                                    (linearLayoutChild.tag as String?)?.let{
-                                        list[it] = linearLayoutChild.selectedItems.getOrElse(0) {""}
+                                val linearLayoutChild = criteriaChild.getChildAt(item)
+                                when(linearLayoutChild) {
+                                    is SelectablePillBox -> {
+                                        (linearLayoutChild.tag as String?)?.let{ criteria ->
+                                            linearLayoutChild.selectedItems.forEach {
+                                                list[criteria] = listOf(it, *list[criteria]?.toTypedArray() ?: arrayOf())
+                                            }
+                                        }
+                                    }
+                                    is AutoCompleteTextView -> {
+                                        (linearLayoutChild.tag as String?)?.let { criteria ->
+                                            list[criteria] = listOf(
+                                                linearLayoutChild.text.toString(),
+                                                *list[criteria]?.toTypedArray() ?: arrayOf()
+                                            )
+                                        }
+                                    }
+                                    else -> {
+                                        Logger.getLogger("bbb").info("${linearLayoutChild::class.qualifiedName}")
                                     }
                                 }
-                                is AutoCompleteTextView -> {
-                                    (linearLayoutChild.tag as String?)?.let {
-                                        list[it] = linearLayoutChild.text.toString()
-                                    }
-                                }
-                                else -> {
-                                    Logger.getLogger("bbb").info("${linearLayoutChild::class.qualifiedName}")
-                                }
-                            }
                         }
                     }
                 }

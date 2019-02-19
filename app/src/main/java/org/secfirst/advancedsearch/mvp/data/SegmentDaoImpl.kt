@@ -6,15 +6,21 @@ import android.net.Uri
 import io.reactivex.Flowable
 import org.secfirst.advancedsearch.interfaces.DataProvider
 import org.secfirst.advancedsearch.models.SearchResult
+import java.util.logging.Logger
 
 class SegmentDaoImpl(val segmentDao: SegmentDao?): DataProvider {
 
-    override fun findByCriteria(text: String, vararg additional: String): Flowable<List<SearchResult>> {
+    override fun findByCriteria(text: String, vararg additional: Pair<String, List<String>>): Flowable<List<SearchResult>> {
+        Logger.getLogger("aaa").info("pew pew1 ${additional.joinToString()}")
+        val difficulty: String = additional.find { it.first == "difficulty" }?.second?.getOrNull(0) ?: ""
+        val categories: String = additional.filter { it.first == "category" }.flatMap {
+            it.second
+        }.firstOrNull().orEmpty()
         return segmentDao?.
             findByCriteria(
                 text,
-                additional.getOrElse(1) {""},
-                additional.getOrElse(0) {""}
+                categories,
+                difficulty
             )?.
             map { it.map { segm ->
                 SearchResult(
