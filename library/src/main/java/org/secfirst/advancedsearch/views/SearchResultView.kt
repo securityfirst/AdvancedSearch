@@ -235,6 +235,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
             override fun onCloseIconClick(p0: View?, p1: Int) {
                 objects[p1].let {
                     objects.removeAt(p1)
+                    pillsBox.setObjects(objects)
                     pillsBox.notifyDataSetChanged()
                 }
             }
