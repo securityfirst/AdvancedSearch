@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fitsSystemWindows="true"
+        android:fillViewport="true"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
     
@@ -96,7 +98,7 @@
         <TextView
                 android:id="@+id/searchTermView"
                 android:layout_marginTop="20dp"
-                android:gravity="end|right"
+                android:gravity="center_horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_width="match_parent"
@@ -106,7 +108,7 @@
         
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
             
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/searchResultsListView"
@@ -116,8 +118,8 @@
                     android:layout_height="wrap_content" />
     
             <TextView
-                    android:layout_marginTop="60dp"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:layout_marginBottom="@dimen/defaultMargin"
                     android:id="@+id/searchResultsEmptyView"
                     android:visibility="gone"
                     android:gravity="center"
@@ -130,8 +132,8 @@
             <TextView
                     android:id="@+id/searchResultsNoSearchTerm"
                     android:visibility="gone"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:layout_marginBottom="@dimen/defaultMargin"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textSize="@dimen/largerTextSize"
@@ -142,8 +144,8 @@
             <TextView
                     android:id="@+id/applyToRefresh"
                     android:visibility="gone"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:layout_marginBottom="@dimen/defaultMargin"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textSize="@dimen/largerTextSize"
