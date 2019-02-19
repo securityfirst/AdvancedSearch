@@ -1,135 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true"
-        android:background="@color/neutralBackground"
-        android:layout_height="match_parent">
-    
-    <RelativeLayout
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
-        <TextView
-                android:id="@+id/resultCount"
-                android:layout_alignParentStart="true"
-                android:layout_width="wrap_content"
-                android:paddingLeft="10dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"/>
-        
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:paddingRight="10dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-            
-            <TextView
-                    android:textSize="@dimen/medSmallTextSize"
-                    android:id="@+id/advancedCriteriaToggle"
-                    android:paddingRight="5dp"
-                    android:text="@string/advanced"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            
-            <ImageView
-                    android:id="@+id/advancedCriteriaToggleCaret"
-                    android:layout_marginTop="7dp"
-                    android:src="@drawable/outline_collapse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-        
-        </LinearLayout>
-    
-    
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
     
     <LinearLayout
-            android:id="@+id/advancedCriteriaPanel"
+            android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:background="@color/advancedCriteriaBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
-        <LinearLayout
-                android:id="@+id/criteriaLayout"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content" >
-        
-        </LinearLayout>
-        
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:gravity="end"
-                android:layout_height="wrap_content">
-            
-            <Button
-                    android:id="@+id/searchCancel"
-                    android:text="@string/cancel"
-                    android:background="@color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            
-            <Button
-                    android:id="@+id/searchApply"
-                    android:text="@string/apply"
-                    android:textColor="@color/resultTitle"
-                    android:background="@color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-        
-        </LinearLayout>
-    
-    </LinearLayout>
-    
-    <TextView
-            android:id="@+id/searchTermView"
-            android:layout_marginTop="20dp"
-            android:gravity="end|right"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="match_parent"
-            android:textSize="@dimen/medSmallTextSize"
-            android:layout_height="wrap_content"/>
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchResultsListView"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:animateLayoutChanges="true"
+            android:background="@color/neutralBackground"
             android:layout_height="match_parent">
         
-        <TextView
-                android:id="@+id/searchResultsEmptyView"
-                android:visibility="gone"
-                android:gravity="center"
-                android:text="@string/no_results_found"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <RelativeLayout
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            
+            <TextView
+                    android:id="@+id/resultCount"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"/>
+            
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingRight="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+                
+                <TextView
+                        android:textSize="@dimen/medSmallTextSize"
+                        android:id="@+id/advancedCriteriaToggle"
+                        android:paddingRight="5dp"
+                        android:text="@string/advanced"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                
+                <ImageView
+                        android:id="@+id/advancedCriteriaToggleCaret"
+                        android:layout_marginTop="7dp"
+                        android:src="@drawable/outline_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            
+            </LinearLayout>
+        
+        
+        </RelativeLayout>
+        
+        <LinearLayout
+                android:id="@+id/advancedCriteriaPanel"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:background="@color/advancedCriteriaBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            
+            <LinearLayout
+                    android:id="@+id/criteriaLayout"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content" >
+            
+            </LinearLayout>
+            
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:gravity="end"
+                    android:layout_height="wrap_content">
+                
+                <Button
+                        android:id="@+id/searchCancel"
+                        android:text="@string/cancel"
+                        android:background="@color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                
+                <Button
+                        android:id="@+id/searchApply"
+                        android:text="@string/apply"
+                        android:textColor="@color/resultTitle"
+                        android:background="@color/transparent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            
+            </LinearLayout>
+        
+        </LinearLayout>
         
         <TextView
-                android:id="@+id/searchResultsNoSearchTerm"
-                android:visibility="gone"
-                android:gravity="center"
-                android:text="@string/no_search_term"
-                android:layout_width="wrap_content"
+                android:id="@+id/searchTermView"
+                android:layout_marginTop="20dp"
+                android:gravity="end|right"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:textSize="@dimen/medSmallTextSize"
                 android:layout_height="wrap_content"/>
         
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResultsListView"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        
+        
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent">
+            
+            <TextView
+                    android:id="@+id/searchResultsEmptyView"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:text="@string/no_results_found"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            
+            <TextView
+                    android:id="@+id/searchResultsNoSearchTerm"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:text="@string/no_search_term"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        
+        </LinearLayout>
+    
+    
     </LinearLayout>
     
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

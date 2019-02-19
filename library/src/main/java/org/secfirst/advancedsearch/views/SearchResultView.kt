@@ -89,8 +89,11 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
     }
 
     private fun setSearchResultsListView() {
-        searchResultsListView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        layoutManager.isAutoMeasureEnabled = true
+        searchResultsListView.layoutManager = layoutManager
         searchResultsListView.adapter = searchResultAdapter
+        searchResultsListView.isNestedScrollingEnabled = false
     }
 
     private fun setApplyClickListener() {
