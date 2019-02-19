@@ -108,12 +108,12 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
                 .forEach {criteriaChild ->
                 when(criteriaChild) {
                     is EditText -> {
-                        if (!list.containsKey(criteriaChild.tag as String?)) {
+                        if (!list.containsKey(criteriaChild.tag as String?) && criteriaChild.text.isNotEmpty()) {
                             list[criteriaChild.tag as String] = listOf(criteriaChild.text.toString())
                         }
                     }
                     is AutoCompleteTextView -> {
-                        if (!list.containsKey(criteriaChild.tag as String?)) {
+                        if (!list.containsKey(criteriaChild.tag as String?) && criteriaChild.text.isNotEmpty()) {
                             list[criteriaChild.tag as String] = listOf(criteriaChild.text.toString())
                         }
                     }
@@ -132,10 +132,12 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
                                     }
                                     is AutoCompleteTextView -> {
                                         (linearLayoutChild.tag as String?)?.let { criteria ->
-                                            list[criteria] = listOf(
-                                                linearLayoutChild.text.toString(),
-                                                *list[criteria]?.toTypedArray() ?: arrayOf()
-                                            )
+                                            if (linearLayoutChild.text.isNotEmpty()) {
+                                                list[criteria] = listOf(
+                                                    linearLayoutChild.text.toString(),
+                                                    *list[criteria]?.toTypedArray() ?: arrayOf()
+                                                )
+                                            }
                                         }
                                     }
                                     else -> {
@@ -170,11 +172,17 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
         }
     }
 
-    override fun displaySearchTermWithResultCount(searchTerm: String, count: Int) {
-        searchTermView.visibility = View.VISIBLE
+    override fun displayResultCountView(count: Int) {
         resultCount.text = context.resources.getQuantityString(R.plurals.results_for_this_query, count, count)
-        searchTermView.text = context.getString(R.string.results_while_searching, searchTerm)
 
+    }
+
+    override fun displaySearchTermWithResultCount(searchTerm: String, count: Int, criteria: String) {
+        searchTermView.visibility = View.VISIBLE
+        searchTermView.text = when(searchTerm.isEmpty()) {
+            false -> context.getString(R.string.results_while_searching_for, searchTerm, criteria)
+            true -> context.getString(R.string.results_while_searching, criteria)
+        }
     }
 
     override fun hideSearchTermView() {

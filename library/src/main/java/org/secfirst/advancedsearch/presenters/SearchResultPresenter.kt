@@ -77,7 +77,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         view: View,
         searchTerm: SearchTerm
     ) {
-        Logger.getLogger(tag).info("Searching for ${searchTerm}")
+        Logger.getLogger(tag).info("Searching for $searchTerm")
         view.resetResults()
         view.displaySearchTerm(searchTerm.text)
         bg {
@@ -90,7 +90,16 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
                             view.showResultsView()
                             segmentList.forEach { Logger.getLogger(tag).info("Result $it") }
                             view.addResultsToAdapter(*segmentList.toTypedArray())
-                            view.displaySearchTermWithResultCount(searchTerm.text, segmentList.size)
+                            view.displayResultCountView(segmentList.size)
+                            val criteria: String = searchTerm
+                                .criteria
+                                ?.filterNot { it.second.isEmpty() }
+                                ?.joinToString(
+                                " "
+                            ) {
+                                "\n${it.first}: ${it.second.joinToString()}"
+                            } ?: ""
+                            view.displaySearchTermWithResultCount(searchTerm.text, segmentList.size, criteria)
                         }
                     }
                     false -> {
@@ -134,9 +143,10 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         fun addPillboxToLayout(criteria: SearchCriteria)
         fun addEditTextToLayout(criteria: SearchCriteria)
         fun addMainTextToLayout(criteria: SearchCriteria)
-        fun displaySearchTermWithResultCount(searchTerm: String, count: Int)
         fun emptyFields()
         fun showApplyResultsView()
         fun hideApplyResultsView()
+        fun displayResultCountView(count: Int)
+        fun displaySearchTermWithResultCount(searchTerm: String, count: Int, criteria: String)
     }
 }
