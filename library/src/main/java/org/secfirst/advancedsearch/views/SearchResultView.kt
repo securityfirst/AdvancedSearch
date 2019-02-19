@@ -2,6 +2,8 @@ package org.secfirst.advancedsearch.views
 
 import android.content.Context
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding.view.clicks
+import com.jakewharton.rxbinding.widget.textChanges
 import com.jakewharton.rxrelay.BehaviorRelay
 import kotlinx.android.synthetic.main.search_view.view.*
 import org.secfirst.advancedsearch.adapters.SearchResultAdapter
@@ -204,6 +207,17 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
         searchResultsNoSearchTerm.visibility = View.GONE
     }
 
+    override fun showApplyResultsView() {
+        hideEmptyView()
+        hideErrorView()
+        hideResultsView()
+        applyToRefresh.visibility = View.VISIBLE
+    }
+
+    override fun hideApplyResultsView() {
+        applyToRefresh.visibility = View.GONE
+    }
+
     override fun showResultsView() {
         searchResultsListView.visibility = View.VISIBLE
     }
@@ -238,6 +252,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
         pillsBox.initFirstSetup(objects as List<Any>?)
         pillsBox.setOnPillClickListener(object  : OnPillClickListener {
             override fun onCloseIconClick(p0: View?, p1: Int) {
+                showApplyResultsView()
                 objects[p1].let {
                     objects.removeAt(p1)
                     pillsBox.setObjects(objects)
@@ -256,6 +271,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
         val addView = AutoCompleteTextView(context)
         addView.setAdapter(adapter)
         addView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            showApplyResultsView()
             adapter.getItem(position)?.let {
                 objects.add(PillItem(it))
                 pillsBox.setObjects(objects)
@@ -279,6 +295,9 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
                 criteria.values.toTypedArray()
             )
             val addView = AutoCompleteTextView(context)
+            addView.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
+                showApplyResultsView()
+            }
             addView.setAdapter(adapter)
             addView.threshold = 1
             addView.tag = criteria.name
@@ -295,6 +314,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
     override fun addMainTextToLayout(criteria: SearchCriteria) {
         val addView = EditText(context)
         addView.setSingleLine(false)
+        addView.textChanges().subscribe { showApplyResultsView() }
         addView.maxLines = 3
         addView.tag = criteria.name
         addView.hint = criteria.name.capitalize()

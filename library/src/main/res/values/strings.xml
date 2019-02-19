@@ -4,6 +4,7 @@
     <string name="search_results">Search Results</string>
     <string name="no_results_found">No results found</string>
     <string name="no_search_term">No search term present</string>
+    <string name="apply_to_search">Press Apply to refresh the view</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
     <string name="results_while_searching">results while searching for \"%1$s\"</string>

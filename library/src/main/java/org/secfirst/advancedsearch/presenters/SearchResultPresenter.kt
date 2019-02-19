@@ -29,12 +29,14 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         view.onSearchClicked().subscribeUntilDetached { list ->
             AdvancedSearch.getSearchTermFromCompositeView(list).let {searchTerm ->
                 performSearch(view, searchTerm)
+                view.hideApplyResultsView()
             }
         }
 
         view.onIntentReceived().subscribeUntilDetached { intent ->
             AdvancedSearch.getSearchTermFromIntent(intent).let {searchTerm ->
                 performSearch(view, searchTerm)
+                view.hideApplyResultsView()
             }
         }
 
@@ -44,6 +46,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
 
         view.onCancelClicked().subscribeUntilDetached {
             view.resetResults()
+            view.showApplyResultsView()
             view.emptyFields()
             setSearchFields(view)
         }
@@ -133,5 +136,7 @@ class SearchResultPresenter(private val dataProvider: DataProvider,
         fun addMainTextToLayout(criteria: SearchCriteria)
         fun displaySearchTermWithResultCount(searchTerm: String, count: Int)
         fun emptyFields()
+        fun showApplyResultsView()
+        fun hideApplyResultsView()
     }
 }

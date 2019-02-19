@@ -103,39 +103,56 @@
                 android:textSize="@dimen/medSmallTextSize"
                 android:layout_height="wrap_content"/>
         
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchResultsListView"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         
-        
-        <LinearLayout
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
             
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchResultsListView"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+    
             <TextView
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="60dp"
                     android:id="@+id/searchResultsEmptyView"
                     android:visibility="gone"
                     android:gravity="center"
+                    android:textSize="@dimen/largerTextSize"
+                    android:layout_gravity="center"
                     android:text="@string/no_results_found"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-            
+    
             <TextView
                     android:id="@+id/searchResultsNoSearchTerm"
                     android:visibility="gone"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
+                    android:textSize="@dimen/largerTextSize"
                     android:text="@string/no_search_term"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+    
+            <TextView
+                    android:id="@+id/applyToRefresh"
+                    android:visibility="gone"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/largerTextSize"
+                    android:text="@string/apply_to_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            
+        </FrameLayout>
         
-        </LinearLayout>
-    
-    
     </LinearLayout>
     
 </androidx.core.widget.NestedScrollView>
