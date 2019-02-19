@@ -169,7 +169,7 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
 
     override fun displaySearchTermWithResultCount(searchTerm: String, count: Int) {
         searchTermView.visibility = View.VISIBLE
-        resultCount.text = context.getString(R.string.results_for_this_query, count)
+        resultCount.text = context.resources.getQuantityString(R.plurals.results_for_this_query, count, count)
         searchTermView.text = context.getString(R.string.results_while_searching, searchTerm)
 
     }
