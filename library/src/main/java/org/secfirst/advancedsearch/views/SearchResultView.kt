@@ -5,9 +5,11 @@ import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -288,6 +290,8 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
             }
         }
         addView.threshold = 1
+        addView.setSingleLine(true)
+        addView.imeOptions = EditorInfo.IME_ACTION_NEXT
         addView.hint = criteria.name.capitalize()
         layout.tag = criteria.name
         layout.addView(pillsBox)
@@ -310,10 +314,14 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
             addView.threshold = 1
             addView.tag = criteria.name
             addView.hint = criteria.name.capitalize()
+            addView.imeOptions = EditorInfo.IME_ACTION_NEXT
+            addView.setSingleLine(true)
             criteriaLayout.addView(addView)
         } ?: kotlin.run {
             val addView = EditText(context)
             addView.hint = criteria.name.capitalize()
+            addView.imeOptions = EditorInfo.IME_ACTION_NEXT
+            addView.setSingleLine(true)
             addView.tag = criteria.name
             criteriaLayout.addView(addView)
         }
@@ -321,11 +329,18 @@ class SearchResultView : FrameLayout, SearchResultPresenter.View {
 
     override fun addMainTextToLayout(criteria: SearchCriteria) {
         val addView = EditText(context)
-        addView.setSingleLine(false)
         addView.textChanges().subscribe { showApplyResultsView() }
         addView.maxLines = 3
         addView.tag = criteria.name
+        addView.imeOptions = EditorInfo.IME_ACTION_GO
+        addView.setSingleLine(true)
         addView.hint = criteria.name.capitalize()
+        addView.setOnEditorActionListener { v, actionId, event ->
+            if ((event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_GO)) {
+                searchApply.performClick()
+            }
+            false
+        }
         criteriaLayout.addView(addView)
     }
 
