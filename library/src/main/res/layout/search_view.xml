@@ -54,46 +54,55 @@
         
         </RelativeLayout>
         
-        <LinearLayout
-                android:id="@+id/advancedCriteriaPanel"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:background="@color/advancedCriteriaBackground"
+        <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             
             <LinearLayout
-                    android:id="@+id/criteriaLayout"
-                    android:layout_width="match_parent"
+                    android:id="@+id/advancedCriteriaPanel"
                     android:orientation="vertical"
-                    android:layout_height="wrap_content" >
-            
-            </LinearLayout>
-            
-            <LinearLayout
-                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/advancedCriteriaBackground"
                     android:layout_width="match_parent"
-                    android:gravity="end"
                     android:layout_height="wrap_content">
                 
-                <Button
-                        android:id="@+id/searchCancel"
-                        android:text="@string/cancel"
-                        android:background="@color/transparent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                <LinearLayout
+                        android:id="@+id/criteriaLayout"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_height="wrap_content" >
                 
-                <Button
-                        android:id="@+id/searchApply"
-                        android:text="@string/apply"
-                        android:textColor="@color/resultTitle"
-                        android:background="@color/transparent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:gravity="end"
+                        android:layout_height="wrap_content">
+                    
+                    <Button
+                            android:id="@+id/searchCancel"
+                            android:text="@string/cancel"
+                            android:background="@color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    
+                    <Button
+                            android:id="@+id/searchApply"
+                            android:text="@string/apply"
+                            android:textColor="@color/resultTitle"
+                            android:background="@color/transparent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                
+                </LinearLayout>
             
             </LinearLayout>
+            
+        </ScrollView>
         
-        </LinearLayout>
         
         <TextView
                 android:id="@+id/searchTermView"
