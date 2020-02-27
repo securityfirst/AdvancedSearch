@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import io.reactivex.Flowable
+import org.jsoup.Jsoup
+import org.jsoup.nodes.TextNode
 import org.secfirst.advancedsearch.interfaces.DataProvider
 import org.secfirst.advancedsearch.models.SearchResult
+import org.secfirst.advancedsearch.wrapTextWithElement
 import java.util.logging.Logger
 
 class SegmentDaoImpl(val segmentDao: SegmentDao?): DataProvider {
@@ -23,9 +26,18 @@ class SegmentDaoImpl(val segmentDao: SegmentDao?): DataProvider {
                 difficulty
             )?.
             map { it.map { segm ->
+                val fullText = segm.text.let { htmlText ->
+                    val doc = Jsoup.parse(htmlText)
+                    for (e in doc.body().allElements) {
+                        for (tn in e.textNodes()) {
+                            tn.wrapTextWithElement(text, "<b>");
+                        }
+                    }
+                    doc.toString()
+                }
                 SearchResult(
                     "${segm.category.title} - ${segm.difficulty.name}",
-                    "<h1>${segm.title}</h1>\n ${segm.text}"
+                    "<h1>${segm.title}</h1>\n $fullText"
                 ) { c: Context ->  c.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("advancedsearch://details/${segm.id}"))) }
             }
             } ?:
