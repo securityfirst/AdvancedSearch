@@ -35,6 +35,7 @@
         </activity>
         <activity
                 android:name=".SearchActivity"
+                android:windowSoftInputMode="adjustResize"
                 android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
